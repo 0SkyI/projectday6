@@ -23,10 +23,10 @@ CREATE TABLE agents (
 """)
 
 # 2. Читаем CSV: каждая строка файла превращается в кортеж из четырёх значений.
-with open("data/agents.csv", encoding="utf-8") as f:
+with open("data/agents.csv", encoding="utf-8") as file:
     rows = [
         (r["id"], r["login"], r["team"], r["hired_at"])
-        for r in csv.DictReader(f)
+        for r in csv.DictReader(file)
     ]
 
 # 3. Вставляем все кортежи в таблицу одной командой.
@@ -44,7 +44,7 @@ for row in cur.execute("SELECT login, team FROM agents LIMIT 3"):
 print("2. Количество строк в справочнике")
 # В таблице одна строка на каждого сотрудника, поэтому считаем все строки сразу.
 # fetchone() берёт единственный результат — кортеж из одного числа.
-print(cur.execute("SELECT COUNT(*) FROM agents").fetchone())
+print(cur.execute("SELECT COUNT(*) FROM agents").fetchone()[0])
 
 print("3. Три сотрудника, нанятых раньше всех")
 # Сортировка по дате найма от старой к новой (по умолчанию ASC), берём три первые строки.
