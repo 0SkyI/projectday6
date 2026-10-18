@@ -42,13 +42,22 @@ for row in cur.execute("SELECT login, team FROM agents LIMIT 3"):
     print(row)
 
 print("2. Количество строк в справочнике")
-# TODO: один результат — используй .fetchone()
+# В таблице одна строка на каждого сотрудника, поэтому считаем все строки сразу.
+# fetchone() берёт единственный результат — кортеж из одного числа.
+print(cur.execute("SELECT COUNT(*) FROM agents").fetchone())
 
 print("3. Три сотрудника, нанятых раньше всех")
-# TODO: логин и дата найма; подсказка — ORDER BY
+# Сортировка по дате найма от старой к новой (по умолчанию ASC), берём три первые строки.
+for row in cur.execute("SELECT login, hired_at FROM agents ORDER BY hired_at LIMIT 3"):
+    print(row)
 
 print("4. Количество строк по каждой смене")
-# TODO: подсказка — GROUP BY
+# Группировка по названию смены: COUNT считает строки внутри каждой группы.
+# ORDER BY team задаёт сортировку по алфавиту названий.
+for row in cur.execute("SELECT team, COUNT(*) FROM agents GROUP BY team ORDER BY team"):
+    print(row)
 
 print("5. Сотрудники, нанятые в 2025 году")
-# TODO: логин и дата найма; подсказка — WHERE
+# Даты лежат в формате ГГГГ-ММ-ДД, поэтому BETWEEN сравнивает их как строки — год в начале.
+for row in cur.execute("SELECT login, hired_at FROM agents WHERE hired_at BETWEEN '2025-01-01' AND '2025-12-31'"):
+    print(row)
